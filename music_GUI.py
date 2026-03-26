@@ -3,21 +3,21 @@ from tkinter import *
 
 from music_selector import music_selector
 
-# ---------- Window setup ----------
+#window setup
 window = Tk()
 window.geometry("1280x720")
 window.title("AI Agent GUI")
 window.config(background="#343940")
 
-# ---------- Selector and choices ----------
+#calls the music selector to choose for user
 selector = music_selector()
 
 MOODS = ["Happy", "Sad", "Energetic", "Calm", "Focused"]
 ACTIVITIES = ["Study", "Workout", "Relax", "Commute", "Sleep"]
 TIMES_OF_DAY = ["Morning", "Afternoon", "Evening", "Night"]
 
-# ---------- Helpers ----------
 
+#setting up time in military format
 def default_time_of_day():
     hour = datetime.datetime.now().hour
     if 5 <= hour < 12:
@@ -28,7 +28,7 @@ def default_time_of_day():
         return "Evening"
     return "Night"
 
-
+#setting up the page for user interaction
 def build_section():
     heading = Label(window, text="Music Selector", font=("Arial", 20, "bold"), bg="#343940", fg="white")
     heading.pack(pady=(20, 10))
@@ -53,7 +53,7 @@ def build_section():
     activity_menu.grid(row=1, column=1, padx=10, pady=5)
 
     # Time of day
-    time_label = Label(frame, text="Time of Day:", bg="#343940", fg="white", font=("Arial", 12))
+    time_label = Label(frame, text="Time of Day (24-HR format):", bg="#343940", fg="white", font=("Arial", 12))
     time_label.grid(row=2, column=0, sticky="w", padx=10, pady=5)
     time_var = StringVar(value=default_time_of_day())
     time_menu = OptionMenu(frame, time_var, *TIMES_OF_DAY)
@@ -71,9 +71,7 @@ def populate_results(music_items):
     for idx, music in enumerate(music_items, start=1):
         listbox.insert(END, f"{idx}. {music}")
 
-
-# ---------- Main UI ----------
-
+#main screen for GUI
 mood_var, activity_var, time_var = build_section()
 
 button = Button(window, text="Get Playlist", font=("Arial", 12, "bold"), bg="#5c7a97", fg="white", padx=10, pady=5)
@@ -85,9 +83,7 @@ status_label.pack(pady=(0, 10))
 listbox = Listbox(window, height=10, width=100, background="#495059", fg="white", font=("Arial", 11))
 listbox.pack(pady=(0, 20))
 
-
-# ---------- Event handling ----------
-
+#gets playlist from selector and put on screen as results
 def on_get_playlist():
     mood = mood_var.get().strip()
     activity = activity_var.get().strip()
@@ -104,7 +100,7 @@ def on_get_playlist():
 
 button.config(command=on_get_playlist)
 
-# initial default population
+#gets default playlist based on input
 populate_results(selector.select_music(mood_var.get(), activity_var.get(), time_var.get()))
 status_label.config(text="Ready. Click Get Playlist to refresh.", fg="white")
 

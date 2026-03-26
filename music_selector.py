@@ -17,23 +17,23 @@ class music_selector:
         }
 
     def select_music(self, mood: str, activity: str, time_of_day: str):
-        """Return list of music recommendations based on user inputs."""
+        #lowers all inputs to match
         mood_key = mood.lower().strip()
         activity_key = activity.lower().strip()
         time_key = time_of_day.lower().strip()
 
-        # direct mapping first
+        # direct mapping first,
         selected = self._recommendation_rules.get((mood_key, activity_key, time_key))
         if selected:
             self.list_of_music = selected
             return selected
 
-        # fallback by mood+activity, then mood alone
+        # v is a list of music suggestions, k is the tuple key (mood, activity, time)
         selected = [v for k, v in self._recommendation_rules.items() if k[0] == mood_key and k[1] == activity_key]
         if selected:
             flattened = [item for sub in selected for item in sub][:8]
             self.list_of_music = flattened
-            return flattened
+            return flattened 
 
         selected = [v for k, v in self._recommendation_rules.items() if k[0] == mood_key]
         if selected:
